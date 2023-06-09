@@ -9,7 +9,7 @@ const fcmServerKey = new FCM(server_key.SERVER_KEY);
 exports.createOrder = async(req, res, next) => {
 
     const { table_number, id_dishes, quantity, total_price, client_name, client_email, date_order } = req.body;
-    console.log(table_number, id_dishes, quantity, total_price, client_name, client_email, date_order);
+
     try {
         const dishs_name = [];
         for (let i = 0; i < id_dishes.length; i++) {
@@ -36,9 +36,15 @@ exports.createOrder = async(req, res, next) => {
 //getOrders
 exports.getOrders = async(req, res, next) => {
 
-    const date_order = req.body.date_order;
+    const { date_order, status } = req.body;
     try {
-        const order = await orders.find({ date_order: date_order });
+        let order;
+        if (!status) {
+            order = await orders.find({ date_order: date_order });
+        } else {
+            order = await orders.find({ date_order: date_order, status: status });
+        }
+
 
         PushNotifications("idAMq6K8wibcgqLWNp_jCt");
         res.status(201).json({
@@ -52,6 +58,84 @@ exports.getOrders = async(req, res, next) => {
 
     }
 
+};
+
+// Update Order
+exports.updateOrder = async(req, res, next) => {
+
+    try {
+
+        const { id_order } = req.body;
+
+        const orderStatus = await orders.findById(id_order);
+
+        if (orderStatus.status == 1) {
+            const order = await orders.findByIdAndUpdate({ _id: id_order }, req.body);
+
+            const updatedOrder = await orders.find({ _id: id_order });
+            res.status(201).json({
+                success: true,
+                updatedOrder
+            });
+        } else {
+            res.status(400).json({
+                success: false,
+                message: "Order is already done!"
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+
+
+};
+
+
+// Delete Order
+exports.deleteOrder = async(req, res, next) => {
+
+    try {
+        const { id_order } = req.body;
+
+        const orderStatus = await orders.findById(id_order);
+        console.log("orderStatus =", orderStatus);
+
+        if (orderStatus.status == 1) {
+            const order = await orders.findByIdAndRemove({ _id: id_order }, req.body);
+
+            res.status(201).json({
+                success: true,
+                message: "Order deleted successfully"
+            });
+        } else {
+            res.status(400).json({
+                success: false,
+                message: "Order is already done!"
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+
+};
+
+// Confirm order
+exports.confirmOrder = async(req, res, next) => {
+
+    try {
+        const { id_order } = req.body;
+        const order = await orders.findByIdAndUpdate({ _id: id_order }, req.body);
+        res.status(201).json({
+            success: true,
+            message: "Order confirmed successfully"
+        });
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
 };
 
 
