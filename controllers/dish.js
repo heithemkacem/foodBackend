@@ -23,3 +23,32 @@ exports.createDish = async(req, res, next) => {
     }
 
 };
+
+// get dish function 
+exports.getDishes = async(req, res, next) => {
+
+    try {
+        const cat_id = req.body.cat_id;
+
+        if (!cat_id) {
+            const dish = await Dish.find();
+            res.status(201).json({
+                success: true,
+                dish
+            })
+        } else {
+            const dish = await Dish.find({ cat_id: cat_id });
+            res.status(201).json({
+                success: true,
+                dish
+            })
+        }
+
+
+    } catch (error) {
+        console.log(error);
+        next(error);
+
+    }
+
+};
