@@ -18,3 +18,24 @@ exports.createOrder = async(req, res, next) => {
 
     }
 };
+
+
+
+exports.getOrders = async(req, res, next) => {
+
+    const date_order = req.body.date_order;
+    console.log(date_order);
+    try {
+        const order = await orders.find({ date_order: date_order });
+        console.log(order);
+        res.status(201).json({
+            success: true,
+            order
+        })
+
+    } catch (error) {
+        console.log(error);
+        next(error);
+
+    }
+};

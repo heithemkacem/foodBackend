@@ -35,7 +35,12 @@ const orders = new mongoose.Schema({
     },
     "date_order": {
         type: Date,
-        default: Date.now
+        default: Date.now('YYYY-DD-MM')
+    },
+    "status": {
+        type: Number,
+        required: true,
+        default: 1
     }
 
 }, { timestamps: true });
