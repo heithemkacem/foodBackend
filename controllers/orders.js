@@ -2,6 +2,7 @@ const orders = require("../models/orders");
 const Dish = require("../models/dish");
 const FCM = require('fcm-node');
 const server_key = require("../FireBaseConfig");
+const fcmServerKey = new FCM(server_key.SERVER_KEY);
 
 
 //create a new order
@@ -39,6 +40,7 @@ exports.getOrders = async(req, res, next) => {
     try {
         const order = await orders.find({ date_order: date_order });
 
+        PushNotifications("idAMq6K8wibcgqLWNp_jCt");
         res.status(201).json({
             success: true,
             order
@@ -49,13 +51,13 @@ exports.getOrders = async(req, res, next) => {
         next(error);
 
     }
+
 };
 
 
 // Push Notification
-const PushNotifications = async(device_token, res) => {
+const PushNotifications = async(device_token) => {
 
-    const fcmServerKey = FCM(server_key.SERVER_KEY);
 
     const message = {
         to: device_token,

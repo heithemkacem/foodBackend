@@ -52,3 +52,53 @@ exports.getDishes = async(req, res, next) => {
     }
 
 };
+
+
+//update category
+exports.UpdateDish = async(req, res, next) => {
+
+    const { name, description, price, category, cat_id } = req.body;
+    console.log(req.body, name, description, price, category, cat_id);
+
+    try {
+
+        const dish = await Dish.findByIdAndUpdate({ _id: req.body.id }, req.body);
+
+        const updatedDish = await Dish.find({ _id: req.body.id });
+
+        res.status(201).json({
+            success: true,
+            updatedDish
+        })
+
+    } catch (error) {
+        console.log(error);
+        next(error);
+
+    }
+
+};
+
+
+//delete a dish 
+exports.DeleteDish = async(req, res, next) => {
+
+    const { name, description, price, category, cat_id } = req.body;
+    console.log(req.body, name, description, price, category, cat_id);
+
+    try {
+
+        const dish = await Dish.findByIdAndRemove({ _id: req.body.id });
+
+        res.status(201).json({
+            success: true,
+            message: "Dish deleted successfully"
+        })
+
+    } catch (error) {
+        console.log(error);
+        next(error);
+
+    }
+
+};

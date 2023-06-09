@@ -6,5 +6,7 @@ const Dish = require("../controllers/dish")
 
 router.post('/createDish', Dish.createDish);
 router.post('/getDishes', Dish.getDishes);
+router.post('/UpdateDish', Dish.UpdateDish);
+router.post('/DeleteDish', Dish.DeleteDish);
 
 module.exports = router;
