@@ -1,0 +1,30 @@
+{
+    "version": 2,
+    "name": "foodManagment",
+    "builds": [{
+        "src": "./index.js",
+        "use": "@vercel/node"
+    }],
+    "routes": [{
+        "src": "/(.*)",
+        "dest": "/"
+    }],
+    "functions": {
+        "api/categories.js": {
+            "memory": 1024,
+            "maxDuration": 60
+        },
+        "api/client.js": {
+            "memory": 1024,
+            "maxDuration": 60
+        },
+        "api/dish.js": {
+            "memory": 1024,
+            "maxDuration": 60
+        },
+        "api/table.js": {
+            "memory": 1024,
+            "maxDuration": 60
+        }
+    }
+}
