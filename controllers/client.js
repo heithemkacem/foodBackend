@@ -33,6 +33,7 @@ exports.login = async (req, res) => {
 
     // Check for existing user
     const user = await Client.findOne({ email });
+    console.log("user =", user);
 
     if (!user) {
       return res
@@ -73,10 +74,12 @@ exports.updatePassword = async (req, res, next) => {
   try {
     const { email, password, newpassword } = req.body;
     if (!email || !password || !newpassword) {
-      return res.status(400).json({
-        success: false,
-        message: "email, password and new password are required!",
-      });
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "email, password and new password are required!",
+        });
     }
 
     // Check for existing user
@@ -138,13 +141,7 @@ exports.sendMail = async (req, res, next) => {
       from: "Aymen Missaoui <aymenmissaoui56@gmail.com>",
       to: email,
       subject: "Reset Password",
-      html: `
-        <div>
-            <h1>Reset Password</h1>
-            <p>Click this <a href="https://expo.dev/accounts/ukps/projects/FoodManagment/ResetPassword?email=${email}">link</a> to reset password</p>
-        </div>
-
-        `,
+      text: "https://food-managment.vercel.app/",
     });
 
     console.log("Message sent: " + info.messageId);

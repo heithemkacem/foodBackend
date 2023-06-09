@@ -1,7 +1,7 @@
 const Categories = require('../models/categories');
 
 
-
+//create category
 exports.createCategory = async(req, res, next) => {
 
 
@@ -22,6 +22,8 @@ exports.createCategory = async(req, res, next) => {
 
 }
 
+
+//get category
 exports.getcategory = async(req, res, next) => {
 
     try {
@@ -36,4 +38,47 @@ exports.getcategory = async(req, res, next) => {
         next(error);
 
     }
+};
+
+
+//update category
+exports.updateCategory = async(req, res, next) => {
+
+    try {
+
+        const cat = await Categories.findByIdAndUpdate({ _id: req.body.id }, req.body);
+
+        const updatedCategory = await Categories.find({ _id: req.body.id });
+
+        res.status(201).json({
+            success: true,
+            updatedCategory
+        })
+
+    } catch (error) {
+        console.log(error);
+        next(error);
+
+    }
+};
+
+//delete a category 
+exports.DeleteCategory = async(req, res, next) => {
+
+
+    try {
+
+        const cat = await Categories.findByIdAndRemove({ _id: req.body.id });
+
+        res.status(201).json({
+            success: true,
+            message: "Category deleted successfully"
+        })
+
+    } catch (error) {
+        console.log(error);
+        next(error);
+
+    }
+
 };

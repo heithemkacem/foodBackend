@@ -24,6 +24,9 @@ router.post('/createOrder', Orders.createOrder, express.raw({ type: 'application
 
 
 router.post('/getOrders', Orders.getOrders);
+router.post('/updateOrder', Orders.updateOrder);
+router.post('/deleteOrder', Orders.deleteOrder);
+router.post('/confirmOrder', Orders.confirmOrder);
 
 
 module.exports = router;
