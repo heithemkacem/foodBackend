@@ -44,15 +44,13 @@ exports.getDishes = async (req, res, next) => {
 
 //update category
 exports.UpdateDish = async (req, res, next) => {
-  console.log("updating");
-
   const { name, description, price, category, cat_id } = req.body;
   console.log(req.body, name, description, price, category, cat_id);
 
   try {
-    const dish = await Dish.findByIdAndUpdate({ _id: req.body._id }, req.body);
+    const dish = await Dish.findByIdAndUpdate({ _id: req.body.id }, req.body);
 
-    const updatedDish = await Dish.find({ _id: req.body._id });
+    const updatedDish = await Dish.find({ _id: req.body.id });
 
     res.status(201).json({
       success: true,
@@ -70,7 +68,7 @@ exports.DeleteDish = async (req, res, next) => {
   console.log(req.body, name, description, price, category, cat_id);
 
   try {
-    const dish = await Dish.findByIdAndRemove({ _id: req.body._id });
+    const dish = await Dish.findByIdAndRemove({ _id: req.body.id });
 
     res.status(201).json({
       success: true,

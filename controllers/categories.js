@@ -38,11 +38,11 @@ exports.getcategory = async (req, res, next) => {
 exports.updateCategory = async (req, res, next) => {
   try {
     const cat = await Categories.findByIdAndUpdate(
-      { _id: req.body._id },
+      { _id: req.body.id },
       req.body
     );
 
-    const updatedCategory = await Categories.find({ _id: req.body._id });
+    const updatedCategory = await Categories.find({ _id: req.body.id });
 
     res.status(201).json({
       success: true,
@@ -57,7 +57,7 @@ exports.updateCategory = async (req, res, next) => {
 //delete a category
 exports.DeleteCategory = async (req, res, next) => {
   try {
-    const cat = await Categories.findByIdAndRemove({ _id: req.body._id });
+    const cat = await Categories.findByIdAndRemove({ _id: req.body.id });
 
     res.status(201).json({
       success: true,
