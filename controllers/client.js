@@ -1,5 +1,6 @@
 const Client = require('../models/client');
 const bcrypt = require('bcryptjs');
+const nodeMailer = require('nodemailer');
 
 exports.signup = async(req, res, next) => {
 
@@ -96,6 +97,72 @@ exports.updatePassword = async(req, res, next) => {
         }
 
         const cryptedpassword = await bcrypt.hash(newpassword, 10);
+        const userUpdate = await Client.findOneAndUpdate({ email: email }, {
+            $set: {
+                password: cryptedpassword
+            }
+        });
+
+        res.status(200).json({ success: true, message: 'Password updated successfully!' });
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+
+//send mail Reset Password
+exports.sendMail = async(req, res, next) => {
+    const email = req.body.email;
+    console.log(email);
+    // Check for existing user
+    const user_email = await Client.findOne({ email: email });
+
+    if (!user_email) {
+        return res.status(404).json({ success: false, message: 'User not found!' });
+    }
+
+    try {
+
+        const transporter = nodeMailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            auth: {
+                user: "aymenmissaoui56@gmail.com",
+                pass: "gsrizdmqcyvvncfk"
+            }
+        });
+        transporter.verify().then(console.log).catch(console.error);
+        const info = await transporter.sendMail({
+            from: "Aymen Missaoui <aymenmissaoui56@gmail.com>",
+            to: email,
+            subject: "Reset Password",
+            text: "https://food-managment.vercel.app/",
+        });
+
+        console.log("Message sent: " + info.messageId);
+
+        res.status(200).json({ success: true, message: 'check your email to reset password' });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+//Reset Password
+
+exports.resetPassword = async(req, res, next) => {
+    try {
+        const { password, email } = req.body;
+
+        if (!password || !email) {
+            return res.status(400).json({ success: false, message: 'email and password is required!' });
+        }
+
+        const cryptedpassword = await bcrypt.hash(password, 10);
         const userUpdate = await Client.findOneAndUpdate({ email: email }, {
             $set: {
                 password: cryptedpassword

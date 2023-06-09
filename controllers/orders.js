@@ -19,8 +19,6 @@ exports.createOrder = async(req, res, next) => {
     }
 };
 
-
-
 exports.getOrders = async(req, res, next) => {
 
     const date_order = req.body.date_order;
