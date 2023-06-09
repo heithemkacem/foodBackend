@@ -11,6 +11,9 @@ const orders = new mongoose.Schema({
         type: JSON,
         required: true
     },
+    "dishes_info": {
+        type: JSON,
+    },
     "quantity": {
         type: JSON,
         required: true
