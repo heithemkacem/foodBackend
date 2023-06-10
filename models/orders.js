@@ -5,16 +5,10 @@ const orders = new mongoose.Schema({
 
     "table_number": {
         type: Number,
-        required: true
+        allowNull: true,
+        // required: true
     },
     "id_dishes": {
-        type: JSON,
-        required: true
-    },
-    "dishes_info": {
-        type: JSON,
-    },
-    "quantity": {
         type: JSON,
         required: true
     },
