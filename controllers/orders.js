@@ -9,7 +9,7 @@ const { MongoClient } = require('mongodb');
 //create a new order
 exports.createOrder = async(req, res, next) => {
 
-    const { table_number, id_dishes, quantity, total_price, client_name, client_email, date_order } = req.body;
+    const { date_order } = req.body;
 
     try {
 
