@@ -27,6 +27,6 @@ router.post('/getOrders', Orders.getOrders);
 router.post('/updateOrder', Orders.updateOrder);
 router.post('/deleteOrder', Orders.deleteOrder);
 router.post('/confirmOrder', Orders.confirmOrder);
-
+router.post('/getOrdersStatus', Orders.getOrdersStatus);
 
 module.exports = router;

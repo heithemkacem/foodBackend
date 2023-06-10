@@ -26,9 +26,12 @@ exports.createOrder = async (req, res, next) => {
     //     dishs_name.push({ "name": find_name.name, "description": find_name.description, "price": find_name.price });
     // }
 
+    //     dishs_name.push({ "name": find_name.name, "description": find_name.description, "price": find_name.price });
+    // }
+
     // req.body.dishes_info = dishs_name;
     const order = await orders.create(req.body);
-    PushNotifications("ExponentPushToken[idAMq6K8wibcgqLWNp_jCt]");
+    // PushNotifications("ExponentPushToken[idAMq6K8wibcgqLWNp_jCt]");
     res.status(201).json({
       success: true,
       order,
@@ -56,6 +59,27 @@ exports.getOrders = async (req, res, next) => {
     res.status(201).json({
       success: true,
       order,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+//getOrders Status
+exports.getOrdersStatus = async (req, res, next) => {
+  const { status } = req.body;
+  try {
+    const order = await orders.find({
+      date_order: "2023-06-10T00:57:45.110+00:00",
+      status: status,
+    });
+    console.log("order =", order.length);
+
+    res.status(201).json({
+      success: true,
+      order: order,
+      orderlength: order.length,
     });
   } catch (error) {
     console.log(error);
