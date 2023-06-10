@@ -8,28 +8,15 @@ const { MongoClient } = require("mongodb");
 
 //create a new order
 exports.createOrder = async (req, res, next) => {
-  const {
-    table_number,
-    id_dishes,
-    quantity,
-    total_price,
-    client_name,
-    client_email,
-    date_order,
-  } = req.body;
+  const { date_order } = req.body;
 
   try {
-    // const dishs_name = [];
-    // for (let i = 0; i < id_dishes.length; i++) {
-    //     const find_name = await Dish.findById(id_dishes[i]);
-
-    //     dishs_name.push({ "name": find_name.name, "description": find_name.description, "price": find_name.price });
-    // }
-
-    //     dishs_name.push({ "name": find_name.name, "description": find_name.description, "price": find_name.price });
-    // }
-
-    // req.body.dishes_info = dishs_name;
+    if (!date_order) {
+      req.body.date_order = new Date()
+        .toISOString()
+        .replace("T", " ")
+        .substr(0, 10);
+    }
     const order = await orders.create(req.body);
     // PushNotifications("ExponentPushToken[idAMq6K8wibcgqLWNp_jCt]");
     res.status(201).json({
@@ -70,10 +57,8 @@ exports.getOrders = async (req, res, next) => {
 exports.getOrdersStatus = async (req, res, next) => {
   const { status } = req.body;
   try {
-    const order = await orders.find({
-      date_order: "2023-06-10T00:57:45.110+00:00",
-      status: status,
-    });
+    const date = new Date().toISOString().replace("T", " ").substr(0, 10);
+    const order = await orders.find({ date_order: date, status: status });
     console.log("order =", order.length);
 
     res.status(201).json({
