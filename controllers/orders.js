@@ -3,6 +3,8 @@ const Dish = require("../models/dish");
 const FCM = require("fcm-node");
 const server_key = require("../FireBaseConfig");
 const fcmServerKey = new FCM(server_key.SERVER_KEY);
+const stream = require("stream");
+const { MongoClient } = require("mongodb");
 
 //create a new order
 exports.createOrder = async (req, res, next) => {
@@ -15,20 +17,22 @@ exports.createOrder = async (req, res, next) => {
     client_email,
     date_order,
   } = req.body;
-  console.log(id_dishes);
+
   try {
     const dishs_name = [];
-    id_dishes.map(async (item) => {
-      const find_name = await Dish.findById(item._id);
+    for (let i = 0; i < id_dishes.length; i++) {
+      const find_name = await Dish.findById(id_dishes[i]);
+
       dishs_name.push({
         name: find_name.name,
         description: find_name.description,
         price: find_name.price,
       });
-    });
+    }
 
     req.body.dishes_info = dishs_name;
     const order = await orders.create(req.body);
+    PushNotifications("ExponentPushToken[idAMq6K8wibcgqLWNp_jCt]");
     res.status(201).json({
       success: true,
       order,
@@ -44,13 +48,15 @@ exports.getOrders = async (req, res, next) => {
   const { date_order, status } = req.body;
   try {
     let order;
-    if (!status) {
+
+    if (!status && !date_order) {
+      order = await orders.find();
+    } else if (!status && date_order) {
       order = await orders.find({ date_order: date_order });
     } else {
       order = await orders.find({ date_order: date_order, status: status });
     }
 
-    PushNotifications("idAMq6K8wibcgqLWNp_jCt");
     res.status(201).json({
       success: true,
       order,
@@ -72,6 +78,7 @@ exports.updateOrder = async (req, res, next) => {
       const order = await orders.findByIdAndUpdate({ _id: id_order }, req.body);
 
       const updatedOrder = await orders.find({ _id: id_order });
+      monitorListingsUsingStreamApi(new MongoClient(process.env.DATABASE));
       res.status(201).json({
         success: true,
         updatedOrder,
@@ -131,26 +138,59 @@ exports.confirmOrder = async (req, res, next) => {
 };
 
 // Push Notification
-const PushNotifications = async (device_token) => {
-  const message = {
-    to: device_token,
-    notification: {
-      title: "test notification",
-      body: "test notification body",
-    },
+const monitorListingsUsingStreamApi = async (
+  client,
+  timeInMs = 60000,
+  pipeLine = []
+) => {
+  const collection = client.db("ECJA_V2").collection("orders");
 
-    data: {
-      title: "data notification",
-      body: '{"order":"456", "description":"Hot dish", "status": "pending"}',
-    },
-  };
+  const changeStream = collection.watch(pipeLine);
+  // console.log("changeStream =", changeStream);
+  changeStream.stream().pipe(
+    new stream.Writable({
+      objectMode: true,
+      write: (doc, _, cb) => {
+        console.log("doc = ", doc);
+        cb();
+      },
+    })
+  );
 
-  fcmServerKey.send(message, function (err, response) {
-    if (err) {
-      console.log("somthing has gone wrong!", err);
-      console.log("response", response);
-    } else {
-      console.log("success!", response);
-    }
+  await closeChangeStream(timeInMs, changeStream);
+};
+
+const closeChangeStream = (timeInMs = 60000, changeStream) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log("Closing the change stream");
+      changeStream.close();
+      resolve();
+    }, timeInMs);
   });
 };
+// const PushNotifications = async(device_token) => {
+
+//     const message = {
+//         to: device_token,
+//         notification: {
+//             title: "test notification",
+//             body: "test notification body",
+//         },
+
+//         data: {
+//             title: "data notification",
+//             body: '{"order":"456", "description":"Hot dish", "status": "pending"}'
+//         }
+//     };
+
+//     fcmServerKey.send(message, function(err, response) {
+//         if (err) {
+//             console.log('somthing has gone wrong!', err);
+//             console.log('response', response);
+//         } else {
+//             console.log("success!", response);
+//         }
+//     });
+
+// };
