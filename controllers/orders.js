@@ -19,18 +19,14 @@ exports.createOrder = async (req, res, next) => {
   } = req.body;
 
   try {
-    const dishs_name = [];
-    for (let i = 0; i < id_dishes.length; i++) {
-      const find_name = await Dish.findById(id_dishes[i]);
+    // const dishs_name = [];
+    // for (let i = 0; i < id_dishes.length; i++) {
+    //     const find_name = await Dish.findById(id_dishes[i]);
 
-      dishs_name.push({
-        name: find_name.name,
-        description: find_name.description,
-        price: find_name.price,
-      });
-    }
+    //     dishs_name.push({ "name": find_name.name, "description": find_name.description, "price": find_name.price });
+    // }
 
-    req.body.dishes_info = dishs_name;
+    // req.body.dishes_info = dishs_name;
     const order = await orders.create(req.body);
     PushNotifications("ExponentPushToken[idAMq6K8wibcgqLWNp_jCt]");
     res.status(201).json({
