@@ -5,6 +5,10 @@ const server_key = require("../FireBaseConfig");
 const fcmServerKey = new FCM(server_key.SERVER_KEY);
 const stream = require("stream");
 const { MongoClient } = require('mongodb');
+const fs = require('fs');
+const ptp = require('pdf-to-printer');
+const path = require('path');
+const express = require('express');
 
 //create a new order
 exports.createOrder = async(req, res, next) => {
@@ -18,6 +22,7 @@ exports.createOrder = async(req, res, next) => {
         }
         const order = await orders.create(req.body);
         // PushNotifications("ExponentPushToken[idAMq6K8wibcgqLWNp_jCt]");
+        printOrder();
         res.status(201).json({
             success: true,
             order
@@ -29,7 +34,6 @@ exports.createOrder = async(req, res, next) => {
 
     }
 };
-
 
 //getOrders
 exports.getOrders = async(req, res, next) => {
@@ -116,7 +120,6 @@ exports.updateOrder = async(req, res, next) => {
 
 };
 
-
 // Delete Order
 exports.deleteOrder = async(req, res, next) => {
 
@@ -162,6 +165,40 @@ exports.confirmOrder = async(req, res, next) => {
     }
 };
 
+
+//print order
+
+const printOrder = async() => {
+    // try {
+    //     fs.writeFileSync('test.pdf', 'Hello World!');
+    //     console.log('print order function worked!');
+    // } catch (error) {
+    //     console.log(error);
+    // }
+
+    // try {
+    //     const data = fs.readFileSync('test.pdf', 'utf8');
+    //     console.log('data = ', data);
+    // } catch (error) {
+    //     console.log(error);
+    // }
+
+    express.raw({ type: 'application/pdf' }), async(req, res) => {
+
+        const options = {};
+        if (req.query.printer) {
+            options.printer = req.query.printer;
+        }
+        const tmpFilePath = "test.pdf";
+
+        fs.writeFileSync(tmpFilePath, req.body, 'binary');
+        await ptp.print(tmpFilePath, options);
+        fs.unlinkSync(tmpFilePath);
+
+        res.status(204);
+        res.send();
+    }
+};
 
 
 

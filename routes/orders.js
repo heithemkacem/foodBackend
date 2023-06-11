@@ -6,21 +6,23 @@ const ptp = require('pdf-to-printer');
 const path = require('path');
 
 
-router.post('/createOrder', Orders.createOrder, express.raw({ type: 'application/pdf' }), async(req, res) => {
+router.post('/createOrder', Orders.createOrder);
 
-    const options = {};
-    if (req.query.printer) {
-        options.printer = req.query.printer;
-    }
-    const tmpFilePath = path.join(`./tmp/${Math.random().toString(36).substr(7)}.pdf`);
+// express.raw({ type: 'application/pdf' }), async(req, res) => {
 
-    fs.writeFileSync(tmpFilePath, req.body, 'binary');
-    await ptp.print(tmpFilePath, options);
-    fs.unlinkSync(tmpFilePath);
+//     const options = {};
+//     if (req.query.printer) {
+//         options.printer = req.query.printer;
+//     }
+//     const tmpFilePath = path.join(`./tmp/${Math.random().toString(36).substr(7)}.pdf`);
 
-    res.status(204);
-    res.send();
-});
+//     fs.writeFileSync(tmpFilePath, req.body, 'binary');
+//     await ptp.print(tmpFilePath, options);
+//     fs.unlinkSync(tmpFilePath);
+
+//     res.status(204);
+//     res.send();
+// }
 
 
 router.post('/getOrders', Orders.getOrders);
