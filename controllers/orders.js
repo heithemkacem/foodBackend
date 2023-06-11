@@ -150,35 +150,19 @@ exports.confirmOrder = async (req, res, next) => {
 //print order
 
 const printOrder = async () => {
-  // try {
-  //     fs.writeFileSync('test.pdf', 'Hello World!');
-  //     console.log('print order function worked!');
-  // } catch (error) {
-  //     console.log(error);
-  // }
+  try {
+    fs.writeFileSync("test.pdf", "Hello World!");
+    console.log("print order function worked!");
+  } catch (error) {
+    console.log(error);
+  }
 
-  // try {
-  //     const data = fs.readFileSync('test.pdf', 'utf8');
-  //     console.log('data = ', data);
-  // } catch (error) {
-  //     console.log(error);
-  // }
-
-  express.raw({ type: "application/pdf" }),
-    async (req, res) => {
-      const options = {};
-      if (req.query.printer) {
-        options.printer = req.query.printer;
-      }
-      const tmpFilePath = "test.pdf";
-
-      fs.writeFileSync(tmpFilePath, req.body, "binary");
-      await ptp.print(tmpFilePath, options);
-      fs.unlinkSync(tmpFilePath);
-
-      res.status(204);
-      res.send();
-    };
+  try {
+    const data = fs.readFileSync("test.pdf", "utf8");
+    console.log("data = ", data);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 // Push Notification
