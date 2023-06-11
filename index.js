@@ -12,6 +12,7 @@ const Categories = require('./routes/categories');
 const tables = require('./routes/table');
 const dish = require('./routes/dish');
 const orders = require('./routes/orders');
+const image = require('./routes/imagebase64');
 
 // CONNECT DATABASE
 mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
@@ -35,6 +36,7 @@ app.use("/api", Categories);
 app.use("/api", tables);
 app.use("/api", dish);
 app.use("/api", orders);
+app.use("/api", image);
 
 
 

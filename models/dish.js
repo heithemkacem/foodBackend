@@ -33,7 +33,6 @@ const dishs = new mongoose.Schema({
     },
     image: {
         type: String,
-        maxlength: 255,
         allowNull: true,
         defaultValue: "default.png",
     },
