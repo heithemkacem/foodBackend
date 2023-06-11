@@ -24,7 +24,6 @@ router.post('/createOrder', Orders.createOrder);
 //     res.send();
 // }
 
-
 router.post('/getOrders', Orders.getOrders);
 router.post('/updateOrder', Orders.updateOrder);
 router.post('/deleteOrder', Orders.deleteOrder);
