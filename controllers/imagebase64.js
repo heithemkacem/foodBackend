@@ -1,12 +1,15 @@
 const imagebase64 = require('../models/imagebase64');
+const nodeBase64 = require('nodejs-base64-converter');
 
 
 exports.uploadImage = async(req, res, next) => {
 
-    console.log(req.body);
+    const image = req.body.image;
     try {
         const base64 = await imagebase64.create(req.body);
-        res.status(201).json({ success: true, base64 });
+        const decodebase64 = nodeBase64.decode(image);
+
+        res.status(201).json({ success: true, link: decodebase64 });
     } catch (error) {
         console.log(error);
         res.status(400).json({ success: false, message: error.message });
