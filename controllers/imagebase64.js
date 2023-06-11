@@ -37,7 +37,7 @@ exports.uploadImage = async(req, res, next) => {
         const jpegImage = fs.readFileSync(path.resolve(__dirname, '../uploadimages/mock_img.jpeg'));
         console.log('jpegImage =', jpegImage);
 
-        res.status(201).json({ success: true, link: buf });
+        res.status(201).json({ success: true, image: buf });
     } catch (error) {
         console.log(error);
         res.status(400).json({ success: false, message: error.message });
