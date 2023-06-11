@@ -28,19 +28,19 @@ exports.uploadImage = async (req, res, next) => {
       // older Node versions, now deprecated
       buf = new Buffer(image, "base64"); // Ta-da
     }
-    console.log("buf =", buf);
+    console.log("buf =", buf.toString());
     fs.writeFileSync(
-      path.resolve(__dirname, "../uploadimages/mock_img.jpeg"),
+      path.resolve(__dirname, "../uploadimages/mock_img.text"),
       buf,
       "binary"
     );
 
     const jpegImage = fs.readFileSync(
-      path.resolve(__dirname, "../uploadimages/mock_img.jpeg")
+      path.resolve(__dirname, "../uploadimages/mock_img.text")
     );
     console.log("jpegImage =", jpegImage);
 
-    res.status(201).json({ success: true, image: buf });
+    res.status(201).json({ success: true, image: buf.toString() });
   } catch (error) {
     console.log(error);
     res.status(400).json({ success: false, message: error.message });
