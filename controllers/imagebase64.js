@@ -40,7 +40,7 @@ exports.uploadImage = async (req, res, next) => {
     );
     console.log("jpegImage =", jpegImage);
 
-    res.status(201).json({ success: true, link: buf });
+    res.status(201).json({ success: true, image: buf });
   } catch (error) {
     console.log(error);
     res.status(400).json({ success: false, message: error.message });
