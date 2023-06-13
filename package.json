@@ -21,6 +21,7 @@
         "dateformat": "^5.0.3",
         "dotenv": "^16.1.4",
         "express": "^4.18.2",
+        "express-fileupload": "^1.4.0",
         "fcm-node": "^1.6.1",
         "gh-pages": "^5.0.0",
         "jsonwebtoken": "^9.0.0",
@@ -30,7 +31,10 @@
         "nodemailer": "^6.9.3",
         "nodemon": "^2.0.22",
         "otp-generator": "^4.0.1",
+        "path": "^0.12.7",
         "pdf-to-printer": "^5.6.0",
+        "rimraf": "^5.0.1",
+        "sharp": "^0.32.1",
         "stream": "^0.0.2"
     }
 }

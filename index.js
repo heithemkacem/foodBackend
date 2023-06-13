@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const fileupload = require("express-fileupload");
+const path = require("path");
 
 //Import Routes
 const Client = require("./routes/client");
@@ -28,11 +30,26 @@ mongoose
     console.error(err);
   });
 
-//Middlewares
-app.use(morgan("dev"));
-app.use(bodyParser.json());
+// Body parser
+app.use(express.json({ limit: "500mb" }));
+app.use(express.urlencoded({ limit: "500mb", extended: true }));
+
+// Cookie parser
 app.use(cookieParser());
 
+//Middlewares
+app.use(morgan("dev"));
+
+// File uploading
+app.use(fileupload());
+
+// Set static folder
+app.use(express.static(path.join(__dirname, "public")));
+
+// DEV logging middleware
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 //Routes Middlewares
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the API" });
