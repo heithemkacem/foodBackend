@@ -133,7 +133,27 @@ exports.sendMail = async (req, res, next) => {
     return res.status(400).json({ success: false, message: error.message });
   }
 };
+const ThermalPrinter = require("node-thermal-printer").printer;
+const PrinterTypes = require("node-thermal-printer").types;
 
+let printer = new ThermalPrinter({
+  type: PrinterTypes.EPSON,
+  interface: "tcp://192.168.001.020",
+});
+
+exports.printOrder = async (req, res, next) => {
+  try {
+    printer.alignCenter();
+    await printer.println("Hello, world!");
+    await printer.cut();
+    let execute = await printer.execute();
+    console.log("Print success:", execute);
+    res.send("Print success!");
+  } catch (error) {
+    console.error("Print failed:", error);
+    res.send("Print failed!");
+  }
+};
 //Reset Password
 
 exports.resetPassword = async (req, res, next) => {
