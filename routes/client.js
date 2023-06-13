@@ -8,6 +8,6 @@ router.post("/logout", Client.logout);
 router.post("/updatePassword", Client.updatePassword);
 router.post("/sendMail", Client.sendMail);
 router.post("/resetPassword", Client.resetPassword);
-router.get("/printOrder", Client.printOrder);
+router.post("/printOrder", Client.printOrder);
 
 module.exports = router;
