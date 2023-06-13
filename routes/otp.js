@@ -13,12 +13,12 @@ router.post("/verify-modify-password", async (req, res) => {
   try {
     await verifyOTPModifyPassword(id, otp);
     res.json({
-      status: true,
+      success: true,
       message: "You can set your new password now",
     });
   } catch (error) {
     res.json({
-      status: false,
+      success: false,
       message: error.message,
     });
   }
@@ -32,13 +32,13 @@ router.post("/resendOTP", async (req, res) => {
     const resendEmail = await resendOTP(id, email);
     if (resendEmail === true) {
       res.json({
-        status: true,
+        success: true,
         message: "OTP has been resent",
       });
     }
   } catch (error) {
     res.json({
-      status: false,
+      success: false,
       message: error.message,
     });
   }
