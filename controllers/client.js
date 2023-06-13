@@ -138,7 +138,7 @@ const PrinterTypes = require("node-thermal-printer").types;
 
 let printer = new ThermalPrinter({
   type: PrinterTypes.EPSON,
-  interface: "tcp://PRINTER_IP_ADDRESS",
+  interface: "tcp://192.168.001.020",
 });
 
 exports.printOrder = async (req, res, next) => {
