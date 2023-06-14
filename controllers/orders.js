@@ -111,11 +111,9 @@ exports.deleteOrder = async (req, res, next) => {
     const { id_order } = req.body;
 
     const orderStatus = await orders.findById(id_order);
-    console.log("orderStatus =", orderStatus);
-
-    if (orderStatus.status == 1) {
-      const order = await orders.findByIdAndRemove({ _id: id_order });
-
+    if (orderStatus.status === 1) {
+      //delete order from database by id order and return success message
+      const order = await orders.findByIdAndDelete(id_order);
       res.status(201).json({
         success: true,
         message: "Order deleted successfully",
@@ -126,6 +124,7 @@ exports.deleteOrder = async (req, res, next) => {
         message: "Order is already done!",
       });
     }
+    console.log("orderStatus =", orderStatus);
   } catch (error) {
     console.log(error);
     next(error);
