@@ -114,7 +114,7 @@ exports.deleteOrder = async (req, res, next) => {
     console.log("orderStatus =", orderStatus);
 
     if (orderStatus.status == 1) {
-      const order = await orders.findByIdAndRemove({ _id: id_order }, req.body);
+      const order = await orders.findByIdAndRemove({ _id: id_order });
 
       res.status(201).json({
         success: true,
